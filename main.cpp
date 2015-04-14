@@ -6,16 +6,16 @@
 // /ddddy:oddddddddds:sddddd/ By adebray - adebray
 // sdddddddddddddddddddddddds
 // sdddddddddddddddddddddddds Created: 2015-04-12 21:04:09
-// :ddddddddddhyyddddddddddd: Modified: 2015-04-14 08:07:38
+// :ddddddddddhyyddddddddddd: Modified: 2015-04-14 12:19:13
 //  odddddddd/`:-`sdddddddds
 //   +ddddddh`+dh +dddddddo
 //    -sdddddh///sdddddds-
 //      .+ydddddddddhs/.
 //          .-::::-`
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
 
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -96,33 +96,33 @@ namespace no {
 
 		Register &	operator=(Register const &) ;
 		bool		operator==(Register const &) const ;
-		bool		operator==(sf::Event::EventType ) const ;
+		bool		operator==(sf::Event) const ;
 
 		sf::Event::EventType	getEvent(void) const ;
 		no::Function			getFunction(void) const ;
 	private:
-		sf::Event::EventType		_event;
-		no::Function	_function;
+		sf::Event::EventType	_event;
+		no::Function			_function;
 	};
 
 	Register::Register(void) {} // Should throw an exception
 	Register::Register(sf::Event::EventType e, no::Function f) : _event(e), _function(f) {}
 	Register::Register(Register const & src) { *this = src; }
 	Register::~Register(void) {}
-	Register &		Register::operator=(Register const & rhs) {
+	Register &				Register::operator=(Register const & rhs) {
 		_event = rhs.getEvent();
 		_function = rhs.getFunction();
 		return *this;
 	}
-	bool			Register::operator==(Register const & rhs) const {
+	bool					Register::operator==(Register const & rhs) const {
 		return (_event == rhs.getEvent());
 	}
-	bool			Register::operator==(sf::Event::EventType rhs) const {
-		return (_event == rhs);
+	bool					Register::operator==(sf::Event rhs) const {
+		return (_event == rhs.type);
 	}
 
-	sf::Event::EventType		Register::getEvent(void) const { return _event; }
-	no::Function	Register::getFunction(void) const { return _function; }
+	sf::Event::EventType	Register::getEvent(void) const { return _event; }
+	no::Function			Register::getFunction(void) const { return _function; }
 
 	class Registry {
 	public:
@@ -133,7 +133,7 @@ namespace no {
 		Registry &	operator=(Registry const &);
 
 		void		load(Register *);
-		void		update(sf::Event &);
+		void		update(sf::Event);
 	private:
 		std::vector<no::Register *>		_vector;
 	};
@@ -152,10 +152,10 @@ namespace no {
 			std::cout << std::endl;
 		}
 	}
-	void		Registry::update(sf::Event & e) {
+	void		Registry::update(sf::Event e) {
 		std::vector<no::Register *>::iterator it;
 
-		it = find(_vector.begin(), _vector.end(), e.type);
+		it = find(_vector.begin(), _vector.end(), e);
 		if (it == _vector.end()) {
 			std::cout << "no such event : " ;
 			printEventType(e.type);
