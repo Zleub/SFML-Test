@@ -6,7 +6,7 @@
 // /ddddy:oddddddddds:sddddd/ By adebray - adebray
 // sdddddddddddddddddddddddds
 // sdddddddddddddddddddddddds Created: 2015-04-12 21:04:09
-// :ddddddddddhyyddddddddddd: Modified: 2015-04-14 12:19:13
+// :ddddddddddhyyddddddddddd: Modified: 2015-04-15 22:22:30
 //  odddddddd/`:-`sdddddddds
 //   +ddddddh`+dh +dddddddo
 //    -sdddddh///sdddddds-
@@ -21,7 +21,7 @@
 
 namespace no {
 
-	typedef	void(* _fptr)(void);
+	typedef		void(* _fptr)(void);
 
 	void		printEventType(sf::Event::EventType e)
 	{
@@ -95,8 +95,6 @@ namespace no {
 		~Register(void);
 
 		Register &	operator=(Register const &) ;
-		bool		operator==(Register const &) const ;
-		bool		operator==(sf::Event) const ;
 
 		sf::Event::EventType	getEvent(void) const ;
 		no::Function			getFunction(void) const ;
@@ -104,22 +102,23 @@ namespace no {
 		sf::Event::EventType	_event;
 		no::Function			_function;
 	};
-
 	Register::Register(void) {} // Should throw an exception
 	Register::Register(sf::Event::EventType e, no::Function f) : _event(e), _function(f) {}
 	Register::Register(Register const & src) { *this = src; }
 	Register::~Register(void) {}
+
 	Register &				Register::operator=(Register const & rhs) {
 		_event = rhs.getEvent();
 		_function = rhs.getFunction();
 		return *this;
 	}
-	bool					Register::operator==(Register const & rhs) const {
-		return (_event == rhs.getEvent());
+
+	bool					operator==(const Register * lhs, const sf::Event::EventType & rhs) {
+		return (lhs->getEvent() == rhs);
 	}
-	bool					Register::operator==(sf::Event rhs) const {
-		return (_event == rhs.type);
-	}
+	// bool					Register::operator==(sf::Event const & rhs) {
+	// 	return (_event == rhs.type);
+	// }
 
 	sf::Event::EventType	Register::getEvent(void) const { return _event; }
 	no::Function			Register::getFunction(void) const { return _function; }
@@ -144,24 +143,36 @@ namespace no {
 	void		Registry::load(Register * r) {
 		std::vector<no::Register *>::iterator it;
 
-		it = find(_vector.begin(), _vector.end(), r);
+		it = find(_vector.begin(), _vector.end(), r->getEvent());
 		if (it == _vector.end()) {
 			_vector.push_back(r);
 			std::cout << "push event : " ;
 			printEventType(r->getEvent());
 			std::cout << std::endl;
 		}
+		else
+		{
+			std::cout << "event already present : " ;
+			printEventType(r->getEvent());
+			std::cout << std::endl;
+		}
 	}
 	void		Registry::update(sf::Event e) {
+		(void)e;
 		std::vector<no::Register *>::iterator it;
 
-		it = find(_vector.begin(), _vector.end(), e);
+		it = find(_vector.begin(), _vector.end(), e.type);
 		if (it == _vector.end()) {
 			std::cout << "no such event : " ;
 			printEventType(e.type);
 			std::cout << std::endl;
 		}
-
+		else {
+			std::cout << "event called: ";
+			printEventType(e.type);
+			std::cout << std::endl;
+			(*it)->getFunction().callFunction();
+		}
 	}
 
 } // no
@@ -183,19 +194,33 @@ void		Hello(void)
 
 int		main(void)
 {
+
+sf::ConvexShape polygon;
+polygon.setPointCount(3);
+polygon.setPoint(0, sf::Vector2f(0, 0));
+polygon.setPoint(1, sf::Vector2f(0, 10));
+polygon.setPoint(2, sf::Vector2f(25, 5));
+polygon.setOutlineColor(sf::Color::Red);
+polygon.setOutlineThickness(5);
+polygon.setPosition(10, 20);
+
+
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 	no::Registry	reg;
 
 	reg.load(new no::Register(sf::Event::KeyPressed, Hello));
-	while (1) {
+	reg.load(new no::Register(sf::Event::KeyPressed, Hello));
+	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			// Close window : exit
 			reg.update(event);
-			// if (event.type == sf::Event::Closed)
-			// 	window.close();
+			if (event.type == sf::Event::Closed)
+				window.close();
 		}
+		window.clear();
+window.draw(polygon);
+		window.display();
 	}
 }
 
