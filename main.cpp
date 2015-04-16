@@ -6,7 +6,7 @@
 // /ddddy:oddddddddds:sddddd/ By adebray - adebray
 // sdddddddddddddddddddddddds
 // sdddddddddddddddddddddddds Created: 2015-04-12 21:04:09
-// :ddddddddddhyyddddddddddd: Modified: 2015-04-15 22:22:30
+// :ddddddddddhyyddddddddddd: Modified: 2015-04-16 04:39:03
 //  odddddddd/`:-`sdddddddds
 //   +ddddddh`+dh +dddddddo
 //    -sdddddh///sdddddds-
@@ -163,9 +163,9 @@ namespace no {
 
 		it = find(_vector.begin(), _vector.end(), e.type);
 		if (it == _vector.end()) {
-			std::cout << "no such event : " ;
-			printEventType(e.type);
-			std::cout << std::endl;
+			// std::cout << "no such event : " ;
+			// printEventType(e.type);
+			// std::cout << std::endl;
 		}
 		else {
 			std::cout << "event called: ";
@@ -195,16 +195,6 @@ void		Hello(void)
 int		main(void)
 {
 
-sf::ConvexShape polygon;
-polygon.setPointCount(3);
-polygon.setPoint(0, sf::Vector2f(0, 0));
-polygon.setPoint(1, sf::Vector2f(0, 10));
-polygon.setPoint(2, sf::Vector2f(25, 5));
-polygon.setOutlineColor(sf::Color::Red);
-polygon.setOutlineThickness(5);
-polygon.setPosition(10, 20);
-
-
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 	no::Registry	reg;
 
@@ -219,7 +209,6 @@ polygon.setPosition(10, 20);
 				window.close();
 		}
 		window.clear();
-window.draw(polygon);
 		window.display();
 	}
 }

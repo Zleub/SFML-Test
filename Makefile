@@ -1,7 +1,7 @@
-NAME =	bin/Client
-INCS =	$(subst .cpp,.hpp,$(SRC))
-OBJ =	$(subst .cpp,.o,$(SRC))
-SRC =	$(shell ls | grep cpp)
+NAME =		bin/test
+INCS =		$(subst .cpp,.hpp,$(SRC))
+OBJ =		$(subst .cpp,.o,$(SRC))
+SRC =		$(shell ls | grep cpp)
 
 CC		=	clang++
 FLAGS	=	-Wall -Werror -Wextra
