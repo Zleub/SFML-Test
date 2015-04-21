@@ -1,7 +1,7 @@
 NAME =		bin/test
 INCS =		$(subst .cpp,.hpp,$(SRC))
 OBJ =		$(subst .cpp,.o,$(SRC))
-SRC =		$(shell ls | grep cpp)
+SRC =		main.cpp
 
 CC		=	clang++
 FLAGS	=	-Wall -Werror -Wextra
@@ -33,8 +33,8 @@ $(NAME): $(OBJ)
 re: fclean all
 
 clean:
-	# rm -rf $(OBJ)
+	rm -rf $(OBJ)
 
 fclean:
-	# rm -rf $(OBJ)
-	# rm -rf $(NAME)
+	rm -rf $(OBJ)
+	rm -rf $(NAME)
