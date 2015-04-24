@@ -6,7 +6,7 @@
 // /ddddy:oddddddddds:sddddd/ By adebray - adebray
 // sdddddddddddddddddddddddds
 // sdddddddddddddddddddddddds Created: 2015-04-12 21:04:09
-// :ddddddddddhyyddddddddddd: Modified: 2015-04-24 21:36:24
+// :ddddddddddhyyddddddddddd: Modified: 2015-04-24 21:49:46
 //  odddddddd/`:-`sdddddddds
 //   +ddddddh`+dh +dddddddo
 //    -sdddddh///sdddddds-
@@ -27,6 +27,8 @@
 		Caca &			operator=(Caca const &);
 
 		virtual void	draw(sf::RenderTarget &, sf::RenderStates) const ;
+		virtual void	drawLocalShape(sf::RenderTarget &, sf::RenderStates) const ;
+		virtual void	drawGlobalShape(sf::RenderTarget &, sf::RenderStates) const ;
 
 		void			setSprite(sf::Sprite);
 		void			setTexture(sf::Texture);
@@ -48,6 +50,27 @@
 		target.draw(tmp, states);
 	}
 
+	void		Caca::drawLocalShape(sf::RenderTarget & target, sf::RenderStates states) const
+	{
+		sf::Sprite			tmp(_texture);
+		sf::Rect<float>		r = tmp.getLocalBounds();
+		sf::RectangleShape	rect;
+
+		rect.setPosition(sf::Vector2f(r.left, r.top));
+		rect.setSize(sf::Vector2f(r.width, r.height));
+		target.draw(rect, states);
+	}
+	void		Caca::drawGlobalShape(sf::RenderTarget & target, sf::RenderStates states) const
+	{
+		sf::Sprite	tmp(_texture);
+		sf::Rect<float>		r = tmp.getGlobalBounds();
+		sf::RectangleShape	rect;
+
+		rect.setPosition(sf::Vector2f(r.left, r.top));
+		rect.setSize(sf::Vector2f(r.width, r.height));
+		target.draw(rect, states);
+	}
+
 // } // no
 
 typedef						void(* _fptr)(void);
@@ -56,7 +79,6 @@ sf::RenderWindow			window(sf::VideoMode(800, 600), "SFML window");
 
 sf::RectangleShape *		make(sf::Rect<float> r)
 {
-	(void)r;
 	sf::RectangleShape *	rect = new sf::RectangleShape();
 	rect->setPosition(sf::Vector2f(r.left, r.top));
 	rect->setSize(sf::Vector2f(r.width, r.height));
@@ -81,7 +103,7 @@ int		main(void)
 
 	Caca caca;
 	sf::Texture tex;
-	tex.loadFromFile("O.png");
+	tex.loadFromFile("res/O.png");
 
 	caca.setTexture(tex);
 	reg[sf::Event::KeyPressed] = Hello;
@@ -98,6 +120,7 @@ int		main(void)
 			}
 		}
 		window.clear();
+		caca.drawLocalShape(window, sf::RenderStates());
 		caca.draw(window, sf::RenderStates());
 		window.display();
 	}
