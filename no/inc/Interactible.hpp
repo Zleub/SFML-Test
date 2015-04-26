@@ -6,7 +6,7 @@
 // /ddddy:oddddddddds:sddddd/ By adebray - adebray
 // sdddddddddddddddddddddddds
 // sdddddddddddddddddddddddds Created: 2015-04-24 20:53:12
-// :ddddddddddhyyddddddddddd: Modified: 2015-04-26 22:42:16
+// :ddddddddddhyyddddddddddd: Modified: 2015-04-26 23:07:20
 //  odddddddd/`:-`sdddddddds
 //   +ddddddh`+dh +dddddddo
 //    -sdddddh///sdddddds-
@@ -43,6 +43,10 @@ namespace no {
 		 */
 		Val &						operator[](const Key &);
 
+		/*! \brief Standard Map convertor
+		 *
+		 * Used to get map's content in string
+		 */
 		std::string					getMap(void) const;
 	private:
 		std::map<Key, Val>			_registry;
