@@ -6,7 +6,7 @@
 // /ddddy:oddddddddds:sddddd/ By adebray - adebray
 // sdddddddddddddddddddddddds
 // sdddddddddddddddddddddddds Created: 2015-04-12 21:04:09
-// :ddddddddddhyyddddddddddd: Modified: 2015-04-24 21:49:46
+// :ddddddddddhyyddddddddddd: Modified: 2015-04-26 22:50:57
 //  odddddddd/`:-`sdddddddds
 //   +ddddddh`+dh +dddddddo
 //    -sdddddh///sdddddds-
@@ -15,76 +15,20 @@
 
 #include <SFML/Graphics.hpp>
 #include <NO.hpp>
+#include <Sketch.hpp>
+#include <Cookbook.hpp>
+// typedef						void(* _fptr)(void);
 
-// namespace no {
-
-	class Caca : public sf::Drawable, public no::Interactible {
-	public:
-		Caca(void);
-		Caca(Caca const &);
-		~Caca(void);
-
-		Caca &			operator=(Caca const &);
-
-		virtual void	draw(sf::RenderTarget &, sf::RenderStates) const ;
-		virtual void	drawLocalShape(sf::RenderTarget &, sf::RenderStates) const ;
-		virtual void	drawGlobalShape(sf::RenderTarget &, sf::RenderStates) const ;
-
-		void			setSprite(sf::Sprite);
-		void			setTexture(sf::Texture);
-	private:
-		// sf::Sprite		_sprite;
-		sf::Texture		_texture;
-};
-
-	Caca::Caca(void) {}
-	Caca::~Caca(void) {}
-
-	// void		Caca::setSprite(sf::Sprite _) { _sprite = _; }
-	void		Caca::setTexture(sf::Texture _) { _texture = _; }
-
-	void		Caca::draw(sf::RenderTarget & target, sf::RenderStates states) const
-	{
-		sf::Sprite	tmp(_texture);
-
-		target.draw(tmp, states);
-	}
-
-	void		Caca::drawLocalShape(sf::RenderTarget & target, sf::RenderStates states) const
-	{
-		sf::Sprite			tmp(_texture);
-		sf::Rect<float>		r = tmp.getLocalBounds();
-		sf::RectangleShape	rect;
-
-		rect.setPosition(sf::Vector2f(r.left, r.top));
-		rect.setSize(sf::Vector2f(r.width, r.height));
-		target.draw(rect, states);
-	}
-	void		Caca::drawGlobalShape(sf::RenderTarget & target, sf::RenderStates states) const
-	{
-		sf::Sprite	tmp(_texture);
-		sf::Rect<float>		r = tmp.getGlobalBounds();
-		sf::RectangleShape	rect;
-
-		rect.setPosition(sf::Vector2f(r.left, r.top));
-		rect.setSize(sf::Vector2f(r.width, r.height));
-		target.draw(rect, states);
-	}
-
-// } // no
-
-typedef						void(* _fptr)(void);
+std::ostream&		operator<<(std::ostream& os, const sf::Event::EventType & e)
+{
+	return os << no::getEventType(e);
+}
+std::ostream&		operator<<(std::ostream& os, const sf::Event::EventType * e)
+{
+	return os << no::getEventType(*e);
+}
 
 sf::RenderWindow			window(sf::VideoMode(800, 600), "SFML window");
-
-sf::RectangleShape *		make(sf::Rect<float> r)
-{
-	sf::RectangleShape *	rect = new sf::RectangleShape();
-	rect->setPosition(sf::Vector2f(r.left, r.top));
-	rect->setSize(sf::Vector2f(r.width, r.height));
-
-	return rect;
-}
 
 void		Hello(void)
 {
@@ -99,29 +43,37 @@ void		Mouse(void)
 
 int		main(void)
 {
-	std::map<sf::Event::EventType, _fptr>	reg;
+	// std::map<sf::Event::EventType, _fptr>	reg;
 
-	Caca caca;
-	sf::Texture tex;
-	tex.loadFromFile("res/O.png");
+	no::Sketch sketch1("res/O.png");
+	no::Sketch sketch2("res/apple.png");
 
-	caca.setTexture(tex);
-	reg[sf::Event::KeyPressed] = Hello;
-	reg[sf::Event::MouseMoved] = Mouse;
+	std::cout << (void*)Hello << std::endl;
+	std::cout << (void*)Mouse << std::endl;
+
+	sketch1[sf::Event::MouseMoved] = Mouse;
+	sketch1[sf::Event::KeyPressed] = Hello;
+	sketch2[sf::Event::MouseMoved] = Mouse;
+
+	// c++ doesn't like very much types
+	no::Cookbook<no::Sketch>::print();
+	no::Cookbook<no::Interactible<sf::Event::EventType, no::_fptr> >::print();
 
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (reg[event.type])
-				reg[event.type]();
+			if (sketch1[event.type])
+				sketch1[event.type]();
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
 		}
 		window.clear();
-		caca.drawLocalShape(window, sf::RenderStates());
-		caca.draw(window, sf::RenderStates());
+		sketch1.drawShape(window, "line");
+		sketch1.draw(window, sf::RenderStates());
+		sketch2.drawShape(window, "line");
+		sketch2.draw(window, sf::RenderStates());
 		window.display();
 	}
 }
