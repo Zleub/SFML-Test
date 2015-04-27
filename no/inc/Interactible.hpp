@@ -6,7 +6,7 @@
 // /ddddy:oddddddddds:sddddd/ By adebray - adebray
 // sdddddddddddddddddddddddds
 // sdddddddddddddddddddddddds Created: 2015-04-24 20:53:12
-// :ddddddddddhyyddddddddddd: Modified: 2015-04-26 23:07:20
+// :ddddddddddhyyddddddddddd: Modified: 2015-04-27 18:14:03
 //  odddddddd/`:-`sdddddddds
 //   +ddddddh`+dh +dddddddo
 //    -sdddddh///sdddddds-
@@ -69,7 +69,7 @@ namespace no {
 		{
 			std::stringstream	ss;
 			for (typename std::map<Key, Val>::const_iterator it = _registry.begin() ; it != _registry.end(); ++it)
-				ss << '\t' << getEventType(it->first) << ":" << reinterpret_cast<void*>(it->second);
+				ss << '\t' << getEventType(it->first) << " -> " << reinterpret_cast<void*>(it->second);
 			ss << '\n';
 			return ss.str();
 		}

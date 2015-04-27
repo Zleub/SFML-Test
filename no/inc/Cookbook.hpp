@@ -6,7 +6,7 @@
 // /ddddy:oddddddddds:sddddd/ By adebray - adebray
 // sdddddddddddddddddddddddds
 // sdddddddddddddddddddddddds Created: 2015-04-26 18:37:47
-// :ddddddddddhyyddddddddddd: Modified: 2015-04-26 22:47:52
+// :ddddddddddhyyddddddddddd: Modified: 2015-04-27 18:07:22
 //  odddddddd/`:-`sdddddddds
 //   +ddddddh`+dh +dddddddo
 //    -sdddddh///sdddddds-
@@ -31,6 +31,7 @@ namespace no {
 		/*! \brief Print the actual cookbook for given types
 		 */
 		static void					print(void);
+		static void					exec(void);
 	private:
 		Cookbook(void);
 		Cookbook(Cookbook const &);
@@ -51,7 +52,7 @@ namespace no {
 		void				Cookbook<I>::print(void)
 		{
 			for (typename std::vector<I *>::iterator it = Cookbook::_book.begin() ; it != Cookbook::_book.end(); ++it)
-				std::cout << ' ' << *it;
+				std::cout << " " << (*it);
 			std::cout << '\n';
 		}
 
