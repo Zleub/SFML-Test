@@ -6,7 +6,7 @@
 // /ddddy:oddddddddds:sddddd/ By adebray - adebray
 // sdddddddddddddddddddddddds
 // sdddddddddddddddddddddddds Created: 2015-04-12 21:04:09
-// :ddddddddddhyyddddddddddd: Modified: 2015-04-27 18:14:32
+// :ddddddddddhyyddddddddddd: Modified: 2015-04-28 20:48:31
 //  odddddddd/`:-`sdddddddds
 //   +ddddddh`+dh +dddddddo
 //    -sdddddh///sdddddds-
@@ -59,7 +59,7 @@ int		main(void)
 	sketch2[sf::Event::MouseMoved] = Mouse;
 
 	// c++ doesn't like very much types
-	no::Cookbook<Sketch >::print();
+	no::Cookbook<Sketch>::print();
 	// no::Cookbook<no::Interactible<sf::Event::EventType, no::_fptr> >::print();
 
 	while (window.isOpen()) {
